@@ -1,7 +1,5 @@
-# sudo apt install python3-flask python3-gtts mpg123 -y && pip3 install --upgrade gtts gtts-token
 from flask import Flask, request
 import os
-import subprocess
 from gtts import gTTS
 import tkinter as tk
 
@@ -27,7 +25,8 @@ CHANNELS = {
     "kasa-9": "http://192.168.0.21:10071/video?channel=9",
     "kasa-10": "http://192.168.0.21:10071/video?channel=10",
 }
-CURRENT_CHANNEL = ""
+CURRENT_CHANNEL = "ll"
+Before = ""
 app = Flask(__name__)
 
 def alert(msg: str):
@@ -40,9 +39,13 @@ def alert(msg: str):
     root.after(f,lambda:root.destroy())
     root.mainloop()
 
-@app.route('/api/stream_channel/<name>')
-def api__stream_channel(name):
-    CURRENT_CHANNEL = name
+@app.route('/api/stream_channel')
+def api__stream_channel():
+    global CURRENT_CHANNEL
+    global Before
+    name=request.args["q"]
+    CURRENT_CHANNEL = request.args["q"]
+    Before = request.args["q"]
     url = CHANNELS[name]
     os.system("pkill vlc")
     os.system(f"vlc -I qt --qt-minimal-view '{url}' &")
@@ -50,10 +53,10 @@ def api__stream_channel(name):
 @app.route('/api/stream_stop')
 def api__stream_stop():
     global CURRENT_CHANNEL
+    global Before
     os.system("pkill vlc")
-    c = str(CURRENT_CHANNEL)
     CURRENT_CHANNEL = ""
-    return c
+    return Before
 @app.route('/api/cmd')
 def api__cmd():
     os.system(request.args["q"])
