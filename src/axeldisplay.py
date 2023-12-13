@@ -25,8 +25,7 @@ CHANNELS = {
     "kasa-9": "http://192.168.0.21:10071/video?channel=9",
     "kasa-10": "http://192.168.0.21:10071/video?channel=10",
 }
-CURRENT_CHANNEL = "ll"
-Before = ""
+CURRENT_CHANNEL = ""
 app = Flask(__name__)
 
 def alert(msg: str):
@@ -42,10 +41,8 @@ def alert(msg: str):
 @app.route('/api/stream_channel')
 def api__stream_channel():
     global CURRENT_CHANNEL
-    global Before
     name=request.args["q"]
     CURRENT_CHANNEL = request.args["q"]
-    Before = request.args["q"]
     url = CHANNELS[name]
     os.system("pkill vlc")
     os.system(f"vlc -I qt --qt-minimal-view '{url}' &")
@@ -53,22 +50,23 @@ def api__stream_channel():
 @app.route('/api/stream_stop')
 def api__stream_stop():
     global CURRENT_CHANNEL
-    global Before
     os.system("pkill vlc")
     CURRENT_CHANNEL = ""
-    v = str(Before).replace(" ", "")
-    Before = ""
-    return v
+    return "Done"
 @app.route('/api/cmd')
 def api__cmd():
     os.system(request.args["q"])
     return "Done"
 @app.route('/api/notify')
 def api__notify():
+    os.system("pkill vlc")
     e =gTTS(request.args["msg"] + " - " + request.args["msg"], lang="es", slow=True)
     e.save("tts.mp3")
     os.system("mpg123 tts.mp3 &")
     alert(request.args["msg"])
+    url = CHANNELS[CURRENT_CHANNEL]
+    os.system("pkill vlc")
+    os.system(f"vlc -I qt --qt-minimal-view '{url}' &")
     return "Done"
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8314, debug=True) ##
