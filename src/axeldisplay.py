@@ -56,7 +56,7 @@ def api__stream_stop():
     global Before
     os.system("pkill vlc")
     CURRENT_CHANNEL = ""
-    v = Before
+    v = str(Before).replace(" ", "")
     Before = ""
     return v
 @app.route('/api/cmd')
