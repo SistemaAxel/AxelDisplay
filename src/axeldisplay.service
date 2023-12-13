@@ -1,0 +1,15 @@
+[Unit]
+Description=AxelDisplay
+After=network.target
+Wants=network-online.target
+
+[Service]
+Restart=always
+Type=simple
+ExecStart=python3 /home/pi/axeldisplay.py
+WorkingDirectory=/home/pi/
+User=pi
+Environment='DISPLAY=:0'
+
+[Install]
+WantedBy=multi-user.target
