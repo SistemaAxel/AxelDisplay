@@ -50,7 +50,9 @@ def api__stream_channel(name):
 @app.route('/api/stream_stop')
 def api__stream_stop():
     os.system("pkill vlc")
-    return CURRENT_CHANNEL
+    c = CURRENT_CHANNEL
+    CURRENT_CHANNEL = ""
+    return c
 @app.route('/api/cmd')
 def api__cmd():
     os.system(request.args["q"])
