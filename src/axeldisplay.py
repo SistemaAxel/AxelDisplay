@@ -64,9 +64,9 @@ def api__notify():
     e.save("tts.mp3")
     os.system("mpg123 tts.mp3 &")
     alert(request.args["msg"])
-    url = CHANNELS[CURRENT_CHANNEL]
-    os.system("pkill vlc")
-    os.system(f"vlc -I qt --qt-minimal-view '{url}' &")
+    if CURRENT_CHANNEL != "":
+        url = CHANNELS[CURRENT_CHANNEL]
+        os.system(f"vlc -I qt --qt-minimal-view '{url}' &")
     return "Done"
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8314, debug=True) ##
