@@ -56,7 +56,9 @@ def api__stream_stop():
     global Before
     os.system("pkill vlc")
     CURRENT_CHANNEL = ""
-    return Before
+    v = Before
+    Before = ""
+    return v
 @app.route('/api/cmd')
 def api__cmd():
     os.system(request.args["q"])
