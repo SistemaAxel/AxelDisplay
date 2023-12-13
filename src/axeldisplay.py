@@ -27,6 +27,7 @@ CHANNELS = {
     "kasa-9": "http://192.168.0.21:10071/video?channel=9",
     "kasa-10": "http://192.168.0.21:10071/video?channel=10",
 }
+CURRENT_CHANNEL = ""
 app = Flask(__name__)
 
 def alert(msg: str):
@@ -39,6 +40,7 @@ def alert(msg: str):
 
 @app.route('/api/stream_channel/<name>')
 def api__stream_channel(name):
+    CURRENT_CHANNEL = name
     url = CHANNELS[name]
     os.system("pkill vlc")
     os.system(f"vlc -I qt --qt-minimal-view '{url}' &")
@@ -46,7 +48,7 @@ def api__stream_channel(name):
 @app.route('/api/stream_stop')
 def api__stream_stop():
     os.system("pkill vlc")
-    return "Done"
+    return CURRENT_CHANNEL
 @app.route('/api/cmd')
 def api__cmd():
     os.system(request.args["q"])
