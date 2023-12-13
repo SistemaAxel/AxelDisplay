@@ -33,7 +33,7 @@ def alert(msg: str):
     root = tk.Tk() 
     root.title("AXEL") 
     root.geometry('750x250+70+70')
-    msg = tk.Label(root, text=msg, font=("Arial", 40)).pack()
+    msg = tk.Label(root, text=msg, font=("Arial", 30)).pack()
     root.after(5000,lambda:root.destroy())
     root.mainloop()
 
@@ -53,7 +53,7 @@ def api__cmd():
     return "Done"
 @app.route('/api/notify')
 def api__notify():
-    e =gTTS(request.args["msg"], lang="es", slow=True)
+    e =gTTS(request.args["msg"] + " - " + request.args["msg"], lang="es", slow=True)
     e.save("tts.mp3")
     os.system("mpg123 tts.mp3 &")
     alert(request.args["msg"])
