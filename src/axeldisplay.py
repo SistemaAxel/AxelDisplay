@@ -32,7 +32,7 @@ app = Flask(__name__)
 
 def alert(msg: str):
     k = len(msg.split(" "))
-    f = k*1250
+    f = ((k*750)*2)+2000
     root = tk.Tk() 
     root.title("AXEL") 
     root.geometry('750x250+70+70')
