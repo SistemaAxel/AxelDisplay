@@ -37,7 +37,7 @@ def alert(msg: str):
     root.title("AXEL") 
     root.geometry('750x250+70+70')
     msg = tk.Label(root, text=msg, font=("Arial", 30)).pack()
-    root.after(k,lambda:root.destroy())
+    root.after(f,lambda:root.destroy())
     root.mainloop()
 
 @app.route('/api/stream_channel/<name>')
