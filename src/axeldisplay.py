@@ -31,11 +31,13 @@ CURRENT_CHANNEL = ""
 app = Flask(__name__)
 
 def alert(msg: str):
+    k = len(msg.split(" "))
+    f = k*1250
     root = tk.Tk() 
     root.title("AXEL") 
     root.geometry('750x250+70+70')
     msg = tk.Label(root, text=msg, font=("Arial", 30)).pack()
-    root.after(5000,lambda:root.destroy())
+    root.after(k,lambda:root.destroy())
     root.mainloop()
 
 @app.route('/api/stream_channel/<name>')
