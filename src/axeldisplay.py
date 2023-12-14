@@ -2,7 +2,8 @@ from flask import Flask, request
 import os
 from gtts import gTTS
 import tkinter as tk
-
+import socket
+DEVICE_NAME = socket.gethostname()
 # Change this to your TVHEADEND / DIZQUETV / IP CAM / etc.
 CHANNELS = {
     "la1": "http://192.168.0.71:9981/play/ticket/stream/channel/b460d7390c8a42a45b3806914c1cf57d?title=1%20%3A%20La%201",
@@ -68,5 +69,9 @@ def api__notify():
         url = CHANNELS[CURRENT_CHANNEL]
         os.system(f"vlc -I qt --qt-minimal-view '{url}' &")
     return "Done"
+
+@app.route('/api/axeldiscover')
+def api__axeldiscover():
+    return {"hostname": DEVICE_NAME, "service": "AxelDisplay"}
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8314, debug=True) ##
