@@ -33,7 +33,7 @@ def api__stream_channel():
     os.system(f"vlc -I qt --qt-minimal-view '{url}' &")
     return "Done"
 @app.route('/api/stream_web')
-def api__stream_channel():
+def api__stream_web():
     global CURRENT_CHANNEL
     name=request.args["q"]
     CURRENT_CHANNEL = request.args["q"]
