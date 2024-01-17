@@ -29,7 +29,7 @@ def api__stream_channel():
     name=request.args["q"]
     CURRENT_CHANNEL = request.args["q"]
     url = CHANNELS[name]
-    os.system("pkill vlc && pkill chromium-browser")
+    os.system("pkill vlc ; pkill chromium-browse")
     os.system(f"vlc -I qt --qt-minimal-view '{url}' &")
     return "Done"
 @app.route('/api/stream_web')
@@ -38,13 +38,13 @@ def api__stream_web():
     name=request.args["q"]
     CURRENT_CHANNEL = request.args["q"]
     url = CHANNELS[name]
-    os.system("pkill vlc && pkill chromium-browser")
+    os.system("pkill vlc ; pkill chromium-browse")
     os.system(f"chromium-browser --start-fullscreen --app='{url}' &")
     return "Done"
 @app.route('/api/stream_stop')
 def api__stream_stop():
     global CURRENT_CHANNEL
-    os.system("pkill vlc && pkill chromium-browser")
+    os.system("pkill vlc ; pkill chromium-browse")
     CURRENT_CHANNEL = ""
     return "Done"
 @app.route('/api/cmd')
