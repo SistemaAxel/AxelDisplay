@@ -29,7 +29,7 @@ def api__stream_channel():
     name=request.args["q"]
     CURRENT_CHANNEL = request.args["q"]
     url = CHANNELS[name]
-    os.system("pkill vlc")
+    os.system("pkill vlc && pkill chromium-browser")
     os.system(f"vlc -I qt --qt-minimal-view '{url}' &")
     return "Done"
 @app.route('/api/stream_web')
@@ -38,32 +38,19 @@ def api__stream_web():
     name=request.args["q"]
     CURRENT_CHANNEL = request.args["q"]
     url = CHANNELS[name]
-    os.system("pkill vlc")
+    os.system("pkill vlc && pkill chromium-browser")
     os.system(f"chromium-browser --start-fullscreen --app='{url}' &")
     return "Done"
 @app.route('/api/stream_stop')
 def api__stream_stop():
     global CURRENT_CHANNEL
-    os.system("pkill vlc")
-    os.system("pkill chromium-browser")
+    os.system("pkill vlc && pkill chromium-browser")
     CURRENT_CHANNEL = ""
     return "Done"
 @app.route('/api/cmd')
 def api__cmd():
     os.system(request.args["q"])
     return "Done"
-@app.route('/api/notify')
-def api__notify():
-    os.system("pkill vlc")
-    e =gTTS(request.args["msg"] + " - " + request.args["msg"], lang="es", slow=True)
-    e.save("tts.mp3")
-    os.system("mpg123 tts.mp3 &")
-    alert(request.args["msg"])
-    if CURRENT_CHANNEL != "":
-        url = CHANNELS[CURRENT_CHANNEL]
-        os.system(f"vlc -I qt --qt-minimal-view '{url}' &")
-    return "Done"
-
 @app.route('/api/axeldiscover')
 def api__axeldiscover():
     return {"hostname": DEVICE_NAME, "service": "AxelDisplay"}
