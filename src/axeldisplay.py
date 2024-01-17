@@ -8,7 +8,7 @@ DEVICE_NAME = socket.gethostname()
 CHANNELS = {
     "playa": "http://212.170.100.189/mjpg/video.mjpg",
     "portugalete": "http://212.8.113.121:8081/mjpg/video.mjpg",
-    "cocina": "rtsp://hack:hack@192.168.0.41/av_stream/ch0",
+    "kasa2024": "http://192.168.0.5:1887/kasa2024",
 }
 CURRENT_CHANNEL = ""
 app = Flask(__name__)
@@ -32,10 +32,20 @@ def api__stream_channel():
     os.system("pkill vlc")
     os.system(f"vlc -I qt --qt-minimal-view '{url}' &")
     return "Done"
+@app.route('/api/stream_web')
+def api__stream_channel():
+    global CURRENT_CHANNEL
+    name=request.args["q"]
+    CURRENT_CHANNEL = request.args["q"]
+    url = CHANNELS[name]
+    os.system("pkill vlc")
+    os.system(f"chromium-browser --start-fullscreen --app='{url}' &")
+    return "Done"
 @app.route('/api/stream_stop')
 def api__stream_stop():
     global CURRENT_CHANNEL
     os.system("pkill vlc")
+    os.system("pkill chromium-browser")
     CURRENT_CHANNEL = ""
     return "Done"
 @app.route('/api/cmd')
